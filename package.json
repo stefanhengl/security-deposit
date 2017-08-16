@@ -1,0 +1,19 @@
+{
+  "name": "SecurityDeposit",
+  "version": "0.0.1",
+  "description": "You don't need  a bank to set up a security deposit",
+  "repository": "https://github.com/stefanhengl/security-deposit",
+  "main": "script.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test"
+  },
+  "author": "Stefan Hengl",
+  "license": "MIT",
+  "dependencies": {
+    "web3": "0.20.0",
+    "chai": "4.1.1"
+  }
+}
