@@ -1,7 +1,7 @@
 # Security Deposit
 This contract acts as a trustee. The trustor transfers the agreed-upon sum
 to the contract for the benefit of the beneficiary. The design of the contract is guided
-by the way a security deposit works that is set up a renter (trustor) in favor of the 
+by the way a security deposit works that is set up by a renter (trustor) in favor of the 
 landlord (beneficiary).
 
 Rules:
@@ -11,7 +11,8 @@ Rules:
 - Only the beneficiary can withdraw funds
 - Upon termination, all funds are returned to the trustor
 - Only the beneficiary can terminate the contract without waiting period
-- The trustor can terminate the contract after a 30 day waiting period, if the beneficiary does not object
+- The trustor can terminate the contract after a 30 day waiting period
+- The beneficiary can object the termination requested by the trustor
 - No interests are accumulated on the funds
 
 ## Prerequisites
