@@ -17,42 +17,67 @@ Rules:
 
 ## Prerequisites
 The code was developed and tested with [truffle](https://github.com/trufflesuite/truffle). 
-If you want to play around with the contract, I recommend to install truffle as well as
+If you want to play around with the contract, I recommend installing truffle as well as
 [testrpc](https://github.com/ethereumjs/testrpc).
 
-## Deploy to testrpc
+## Deploy factory to testrpc
 
     testrpc
-    truffle migrate
+    truffle migrate --reset
     
 ## Run the tests
 
     truffle test
 
-## Interact with deployed contract
+## Hands-on
+
+It is very instructive to have a look at the tests in `/test`. The
+tests show how to trigger the factory to create a new security deposit
+and how to interact with the freshly created contract. Below I give
+a shorter introduction on how create a contract 
+via the truffle console.
 
 Start the truffle console
 
     truffle console
     
-Get the trustor
+Create a new security deposit contract
 
-    SecurityDeposit.deployed()
-        .then((instance) => {return instance.trustor.call()})
-        .then((res) => {console.log(res)})
+    SecurityDepositFactory.deployed().then((factory) => {return factory.newSecurityDeposit(web3.eth.accounts[0])})
 
-Set the beneficiary
+The factory will return a transaction receipt similar to this one
 
-    SecurityDeposit.deployed()
-        .then((instance) => {instance.setBeneficiary(web3.eth.accounts[1])})
-      
-Transfer funds
+    { tx: '0xfd9922d772f8b56f7d75a1eb12279197c7ce2a27028291ec01068f549d70363d',
+    receipt:
+       { transactionHash: '0xfd9922d772f8b56f7d75a1eb12279197c7ce2a27028291ec01068f549d70363d',
+         transactionIndex: 0,
+         blockHash: '0x9d4903aa09d9879feccbcf706756e034057ec35922462735f2e5e11e40780994',
+         blockNumber: 34,
+         gasUsed: 352813,
+         cumulativeGasUsed: 352813,
+         contractAddress: null,
+         logs: [] },
+    logs: [] }
 
-    SecurityDeposit.deployed()
-        .then((instance) => {instance.sendFunds({from: web3.eth.accounts[0], value: 100, gas: 400000})})
-    
+Get an address of the newly created contract
+
+    SecurityDepositFactory.deployed().then((factory) => {return factory.getContractAddressAtIndex(0)})
+        
+    '0x3b31f5d4cac76f757f5429359a52746e680b9a41'
+
+Get an instance of the contract
+
+    security_deposit = SecurityDeposit.at('0x3b31f5d4cac76f757f5429359a52746e680b9a41')
+
+Set a beneficiary
+
+    security_deposit.setBeneficiary(web3.eth.accounts[1])
+
+Send funds
+
+    security_deposit.sendFunds({value:100, from: web3.eth.accounts[0], gas: 400000 })
+
 Check the balance
 
-    SecurityDeposit.deployed()
-        .then((instance) => {console.log(web3.eth.getBalance(instance.address))})
-
+    web3.eth.getBalance('0x3b31f5d4cac76f757f5429359a52746e680b9a41')
+    { [String: '100'] s: 1, e: 2, c: [ 100 ] }

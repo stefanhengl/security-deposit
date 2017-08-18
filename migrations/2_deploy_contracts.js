@@ -1,5 +1,5 @@
-var SecurityDeposit = artifacts.require("./SecurityDeposit.sol");
+let SecurityDepositFactory = artifacts.require('./SecurityDepositFactory.sol')
 
-module.exports = function(deployer) {
-  deployer.deploy(SecurityDeposit);
-};
+module.exports = function (deployer) {
+  deployer.deploy(SecurityDepositFactory)
+}

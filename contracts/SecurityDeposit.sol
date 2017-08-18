@@ -1,29 +1,32 @@
-/* Security Deposit
-This contract acts as a trustee. The trustor transfers the agreed-upon sum
-to this contract for the benefit of the beneficiary. The contract is designed
-based on the security deposit provided by a renter for the benefit of the landlord.
-
-Rules:
-- Only the trustor can transfer funds to the contract
-- Only the trustor determines the beneficiary
-- Once set, the beneficiary can not be changed
-- Only the beneficiary can withdraw funds
-- Upon termination, all funds are returned to the trustor
-- Only the beneficiary can terminate the contract without waiting period
-- The trustor can terminate the contract after a 30 day waiting period, if the beneficiary does not object
-- No interests are accumulated on the funds
-*/
 pragma solidity ^0.4.13;
+
+
+contract SecurityDepositFactory {
+    // Factory contract. This factory outputs security-deposit-contract on demand.
+    address[] public contracts;
+
+    function getContractAddressAtIndex(uint i) constant returns (address c) {
+        return contracts[i];
+    }
+
+    function newSecurityDeposit(address trustor) public returns (address newContract)
+    {
+        SecurityDeposit c = new SecurityDeposit(trustor);
+        contracts.push(c);
+        return c;
+    }
+}
 
 
 contract SecurityDeposit {
 
-    address public trustor = msg.sender;
+    address public trustor; // = msg.sender;
     address public beneficiary;
 
     uint private claimed_at;  // keep track of the trustor's claim to terminate the contract
-    uint private flag = 0;
-    uint private objection = 0;
+    uint private flag;
+
+    uint private objection;
 
     modifier onlyBy(address _address) {
         require(msg.sender == _address);
@@ -36,7 +39,16 @@ contract SecurityDeposit {
     }
 
     event Withdrawal(address by, uint amount, string reason);
+
     event Claimed(address by, uint timestamp);
+
+    function SecurityDeposit(address owner) {
+        trustor = owner;
+        // 0 = Beneficiary has not been set yet, 1 = Beneficiary has been set
+        flag = 0;
+        // objection Keeps track of whether the beneficiary objects to the trustor's request to cancel
+        objection = 0;
+    }
 
     function setBeneficiary(address new_beneficiary) onlyBy(trustor) {
         // The beneficiary can only be set once
@@ -54,7 +66,8 @@ contract SecurityDeposit {
         // only the beneficiary can withdraw funds. All withdrawals throw an event
         if (amount < this.balance) {
             msg.sender.transfer(amount);
-            Withdrawal(msg.sender, amount, reason);  // throw an event, which the trustor can monitor
+            Withdrawal(msg.sender, amount, reason);
+            // throw an event, which the trustor can monitor
         }
     }
 
@@ -72,7 +85,8 @@ contract SecurityDeposit {
     function claim() onlyBy(trustor) {
         claimed_at = now;
         objection = 0;
-        Claimed(msg.sender, claimed_at);  // throw an event, which the beneficiary can monitor
+        Claimed(msg.sender, claimed_at);
+        // throw an event, which the beneficiary can monitor
     }
 
     function object() onlyBy(beneficiary) {
