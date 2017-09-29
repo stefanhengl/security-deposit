@@ -13,7 +13,12 @@
   "author": "Stefan Hengl",
   "license": "MIT",
   "dependencies": {
-    "web3": "0.20.0",
-    "chai": "4.1.1"
+    "bignumber": "^1.1.0",
+    "bignumber.js": "^4.0.4",
+    "bip39": "^2.4.0",
+    "chai": "4.1.1",
+    "ethereumjs-wallet": "^0.6.0",
+    "web3": "^0.20.1",
+    "web3-provider-engine": "^13.2.9"
   }
 }

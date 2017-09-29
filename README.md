@@ -15,7 +15,7 @@ Rules:
 - The beneficiary can object the termination requested by the trustor
 - No interests are accumulated on the funds
 
-## Prerequisites
+## Getting started
 The code was developed and tested with [truffle](https://github.com/trufflesuite/truffle). 
 If you want to play around with the contract, I recommend installing truffle as well as
 [testrpc](https://github.com/ethereumjs/testrpc).
