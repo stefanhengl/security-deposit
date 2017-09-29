@@ -2,12 +2,8 @@ pragma solidity ^0.4.13;
 
 
 contract SecurityDepositFactory {
-    // Factory contract. This factory outputs security-deposit-contract on demand.
+    // Factory contract. This factory creates a security-deposit-contract on demand.
     address[] public contracts;
-
-    function getContractAddressAtIndex(uint i) constant returns (address c) {
-        return contracts[i];
-    }
 
     function newSecurityDeposit(address trustor) public returns (address newContract)
     {
